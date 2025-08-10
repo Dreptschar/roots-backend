@@ -1,3 +1,3 @@
-module roots-backend
+module github.com/Dreptschar/roots-backend
 
 go 1.24
