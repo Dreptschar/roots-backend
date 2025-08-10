@@ -1,7 +1,10 @@
 package handlers
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
-func StatusHandler(http.ResponseWriter, *http.Request) {
-
+func StatusHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "STATUS")
 }
