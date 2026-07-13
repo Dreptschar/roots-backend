@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: plant-manager-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: plant_manager
+      POSTGRES_USER: plant_manager
+      POSTGRES_PASSWORD: plant_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - plant_manager_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U plant_manager -d plant_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  plant_manager_postgres_data:

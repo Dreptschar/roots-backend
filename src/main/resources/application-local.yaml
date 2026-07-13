@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/plant_manager
+    username: plant_manager
+    password: plant_manager
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+  jpa:
+    open-in-view: false
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8081

@@ -1,0 +1,47 @@
+# Build output
+target/
+build/
+src/main/java/com/dreptschar/plantmanagerbackend/ports/outbound/
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+.apt_generated
+.factorypath
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# OS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Local env / secrets
+.env
+.env.*
+application-local.yml
+application-local.properties
+
+# Temp files
+*.tmp
+*.swp
