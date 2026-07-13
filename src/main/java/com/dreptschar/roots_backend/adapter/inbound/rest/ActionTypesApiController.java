@@ -1,7 +1,10 @@
 package com.dreptschar.roots_backend.adapter.inbound.rest;
 
 import com.dreptschar.roots_backend.api.ActionTypesApi;
+import com.dreptschar.roots_backend.model.ActionTypeResponse;
 import jakarta.annotation.Generated;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,4 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
     comments = "Generator version: 7.13.0")
 @RestController
 @RequestMapping("${openapi.plantManagerBackend.base-path:/api}")
-public class ActionTypesApiController implements ActionTypesApi {}
+public class ActionTypesApiController implements ActionTypesApi {
+
+  @Override
+  public ResponseEntity<List<ActionTypeResponse>> actionTypesGet() {
+    return ResponseEntity.ok(MockApiData.actionTypes());
+  }
+}

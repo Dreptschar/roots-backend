@@ -79,6 +79,8 @@ This project uses hexagonal architecture.
 - API style: REST
 - OpenAPI contract source: `src/main/resources/openapi.yaml`
 - Generated API interfaces are used by handwritten controller implementations
+- The OpenAPI file is the source of truth for frontend/backend communication.
+- All frontend/backend communication should go through the generated API interfaces and generated model classes.
 
 ### Persistence and infrastructure
 
@@ -128,6 +130,7 @@ This project uses hexagonal architecture.
 - Generated sources location: `src-gen/openapi`
 - Domain package: `com.dreptschar.roots_backend.domain`
 - Generated API interfaces are used by handwritten controller implementations
+- Frontend/backend communication must follow the OpenAPI-generated classes and not bypass them with ad hoc DTOs.
 - First implemented endpoint: `GET /plants`
 - Plants list response is a generated OpenAPI model mapped from `Plant`
 - Mapper framework: MapStruct
