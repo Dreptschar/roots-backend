@@ -1,7 +1,7 @@
-package com.dreptschar.plantmanagerbackend.domain.service;
+package com.dreptschar.roots_backend.domain.service;
 
-import com.dreptschar.plantmanagerbackend.domain.model.Plant;
-import com.dreptschar.plantmanagerbackend.ports.outbound.PlantReadPort;
+import com.dreptschar.roots_backend.domain.model.Plant;
+import com.dreptschar.roots_backend.ports.outbound.PlantReadPort;
 import java.util.List;
 import org.springframework.stereotype.Service;
 

@@ -18,13 +18,13 @@ tags:
 paths:
   /rooms:
     get:
-      tags: [Rooms]
+      tags: [ Rooms ]
       summary: List rooms
       responses:
         "200":
           description: Room list
     post:
-      tags: [Rooms]
+      tags: [ Rooms ]
       summary: Create a room
       responses:
         "201":
@@ -32,7 +32,7 @@ paths:
 
   /rooms/{roomId}:
     get:
-      tags: [Rooms]
+      tags: [ Rooms ]
       summary: Get a room by id
       parameters:
         - $ref: "#/components/parameters/RoomId"
@@ -42,7 +42,7 @@ paths:
         "404":
           description: Not found
     patch:
-      tags: [Rooms]
+      tags: [ Rooms ]
       summary: Update a room
       parameters:
         - $ref: "#/components/parameters/RoomId"
@@ -52,7 +52,7 @@ paths:
         "404":
           description: Not found
     delete:
-      tags: [Rooms]
+      tags: [ Rooms ]
       summary: Delete a room
       parameters:
         - $ref: "#/components/parameters/RoomId"
@@ -64,13 +64,19 @@ paths:
 
   /plants:
     get:
-      tags: [Plants]
+      tags: [ Plants ]
       summary: List plants
       responses:
         "200":
           description: Plant list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlantSummaryResponse"
     post:
-      tags: [Plants]
+      tags: [ Plants ]
       summary: Create a plant
       responses:
         "201":
@@ -78,7 +84,7 @@ paths:
 
   /plants/{plantId}:
     get:
-      tags: [Plants]
+      tags: [ Plants ]
       summary: Get a plant by id
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -88,7 +94,7 @@ paths:
         "404":
           description: Not found
     patch:
-      tags: [Plants]
+      tags: [ Plants ]
       summary: Update a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -98,7 +104,7 @@ paths:
         "404":
           description: Not found
     delete:
-      tags: [Plants]
+      tags: [ Plants ]
       summary: Delete a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -110,7 +116,7 @@ paths:
 
   /plants/{plantId}/actions:
     get:
-      tags: [Plant Actions]
+      tags: [ Plant Actions ]
       summary: List actions performed on a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -118,7 +124,7 @@ paths:
         "200":
           description: Action history
     post:
-      tags: [Plant Actions]
+      tags: [ Plant Actions ]
       summary: Record an action for a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -128,7 +134,7 @@ paths:
 
   /plants/{plantId}/action-plans:
     get:
-      tags: [Action Plans]
+      tags: [ Action Plans ]
       summary: List action plans for a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -136,7 +142,7 @@ paths:
         "200":
           description: Action plan list
     post:
-      tags: [Action Plans]
+      tags: [ Action Plans ]
       summary: Create an action plan for a plant
       parameters:
         - $ref: "#/components/parameters/PlantId"
@@ -146,7 +152,7 @@ paths:
 
   /action-types:
     get:
-      tags: [Action Types]
+      tags: [ Action Types ]
       summary: List action types
       responses:
         "200":
@@ -168,4 +174,36 @@ components:
       schema:
         type: integer
         format: int64
-
+  schemas:
+    PlantSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        species:
+          type: string
+        roomId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        photoPath:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - species
+        - roomId
+        - notes
+        - photoPath
+        - createdAt
+        - updatedAt

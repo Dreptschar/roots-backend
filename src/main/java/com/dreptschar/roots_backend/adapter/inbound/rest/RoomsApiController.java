@@ -1,6 +1,6 @@
-package com.dreptschar.plantmanagerbackend.adapter.inbound.rest;
+package com.dreptschar.roots_backend.adapter.inbound.rest;
 
-import com.dreptschar.plantmanagerbackend.adapter.inbound.rest.api.ActionPlansApi;
+import com.dreptschar.roots_backend.api.RoomsApi;
 import jakarta.annotation.Generated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,4 +11,4 @@ import org.springframework.web.bind.annotation.RestController;
     comments = "Generator version: 7.13.0")
 @RestController
 @RequestMapping("${openapi.plantManagerBackend.base-path:/api}")
-public class ActionPlansApiController implements ActionPlansApi {}
+public class RoomsApiController implements RoomsApi {}

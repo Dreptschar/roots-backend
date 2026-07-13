@@ -1,6 +1,6 @@
-package com.dreptschar.plantmanagerbackend.adapter.inbound.rest;
+package com.dreptschar.roots_backend.adapter.inbound.rest;
 
-import com.dreptschar.plantmanagerbackend.adapter.inbound.rest.api.ActionTypesApi;
+import com.dreptschar.roots_backend.api.ActionTypesApi;
 import jakarta.annotation.Generated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

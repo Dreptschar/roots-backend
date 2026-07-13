@@ -1,8 +1,8 @@
-package com.dreptschar.plantmanagerbackend.adapter.inbound.rest.api.model;
+package com.dreptschar.roots_backend.domain.model;
 
 import java.time.LocalDateTime;
 
-public record PlantSummaryResponse(
+public record Plant(
     Long id,
     String name,
     String species,

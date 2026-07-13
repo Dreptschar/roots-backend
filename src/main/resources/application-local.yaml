@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: roots-backend
   datasource:
     url: jdbc:postgresql://localhost:5432/plant_manager
     username: plant_manager

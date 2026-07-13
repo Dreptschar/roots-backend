@@ -1,7 +1,8 @@
 # Build output
 target/
 build/
-src/main/java/com/dreptschar/plantmanagerbackend/ports/outbound/
+src-gen/
+src/main/java/com/dreptschar/roots_backend/ports/outbound/
 
 # Maven wrapper
 !.mvn/wrapper/maven-wrapper.jar

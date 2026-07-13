@@ -2,10 +2,10 @@
 
 ## Verified project facts
 
-- Project name: `PlantManagerBackend`
+- Project name: `roots-backend`
 - Maven artifact coordinates:
   - groupId: `com.dreptschar`
-  - artifactId: `PlantManagerBackend`
+  - artifactId: `roots-backend`
   - version: `1.0-SNAPSHOT`
 - Build system: Maven
 - Framework: Spring Boot
@@ -14,55 +14,49 @@
 - Current dependencies:
   - `spring-boot-starter-web`
   - `spring-boot-starter-validation`
+  - `mapstruct`
   - `spring-boot-starter-test` for tests
+- Current build plugins:
+  - `openapi-generator-maven-plugin`
+  - `build-helper-maven-plugin`
+  - `maven-compiler-plugin`
 - Current description from `pom.xml`: “Spring Boot backend exposing REST endpoints”
-- Repository state at inspection time: very early-stage / mostly empty aside from build and IDE metadata
+- Repository state at inspection time: active backend implementation with generated OpenAPI contracts, handwritten adapters, and tests
 
-## Working assumption
+## Product scope
 
-This repository is intended to become a backend service for a web frontend that lets users manage their house plants.
-The project is intended for self-hosting and open-source use.
+This repository is a self-hosted backend for managing house plants, their care actions, recurring care plans, and related metadata.
 
-## Questions to finalize the project spec
+## Confirmed decisions
 
-### Product scope
-
-1. What is the exact purpose of the application?
-2. Intended users: people who have houseplants and want software to manage watering schedules and track when plants were last watered, fertilized, and similar care actions.
-3. What problem should it solve better than a generic CRUD backend?
-
-### Core domain
-
-4. Additional entities needed so far:
-   - `Room`
-   - plant action history / activity history
-5. What fields should a `Plant` have?
-6. Are there relationships between plants and other entities?
-
-### Features
-
-7. Must-have version 1 features:
-   - create plants
-   - edit plants
-   - track watering
-   - track fertilizing
-   - dashboard
-8. Authentication and authorization are required.
-9. Scheduling and notifications are required for version 1.
-10. User notification channel for version 1: Discord webhook.
-11. File/image upload for plant photos is required.
+- Core domain entities for v1:
+  - `Plant`
+  - `Room`
+  - `ActionType`
+  - `ActionPlan`
+  - `PlantAction`
+- Plant model direction for v1:
+  - `name`
+  - `species`
+  - `room`
+  - `actionPlans`
+  - `notes`
+  - `photo`
+  - `createdAt`
+- Features for version 1:
+  - create plants
+  - edit plants
+  - track watering
+  - track fertilizing
+  - dashboard
+  - file/image upload for plant photos
+- Authentication and authorization are not part of the first version.
+- Notifications for version 1 use a Discord webhook.
+- Pagination, filtering, sorting, and search are not required from day one.
 
 ## Current domain direction
 
 - Household scope: single household per installation
-- Plant model for version 1:
-  - `name`
-  - `species`
-  - `room`
-  - `actionPlans` as a generic list for future extensibility
-  - `notes`
-  - `photo`
-  - `createdAt`
 - Action model direction:
   - `action-task`
   - `action-schedule`
@@ -70,19 +64,29 @@ The project is intended for self-hosting and open-source use.
 - The goal is to avoid hard-coding only watering intervals so new action types can be added more easily later.
 - First-version scheduling uses simple day-based intervals.
 
+## Architecture
+
+This project uses hexagonal architecture.
+
+- Domain code stays in `com.dreptschar.roots_backend.domain` and contains the business model and business services.
+- Inbound adapters live in `com.dreptschar.roots_backend.adapter.inbound.rest` and expose HTTP controllers.
+- Generated OpenAPI contracts live in `com.dreptschar.roots_backend.api` and `com.dreptschar.roots_backend.model`, under `src-gen/openapi`.
+- Outbound adapters and persistence code should stay behind ports and adapters, not leak into the domain.
+- Controllers should depend on domain services and mapper interfaces, not on infrastructure details.
+
 ### API design
 
-11. Should this be a pure REST API, or do you also want webhooks / SSE / GraphQL?
-12. What should the main endpoints be?
-13. Do you want pagination, filtering, sorting, and search from day one?
+- API style: REST
+- OpenAPI contract source: `src/main/resources/openapi.yaml`
+- Generated API interfaces are used by handwritten controller implementations
 
 ### Persistence and infrastructure
 
-14. Database choice: PostgreSQL.
-15. Persistence layer: JDBC / Spring JDBC (`JdbcTemplate` style).
-16. Migration / schema history: Flyway.
-17. Docker support: yes, using a local PostgreSQL container.
-18. Will this run locally only, or be deployed somewhere?
+- Database choice: PostgreSQL
+- Persistence layer: JDBC / Spring JDBC (`JdbcTemplate` style)
+- Migration / schema history: Flyway
+- Docker support: yes, using a local PostgreSQL container
+- Local development profile: `local`
 
 ### Schema decisions made so far
 
@@ -91,19 +95,23 @@ The project is intended for self-hosting and open-source use.
 - `plant_actions` stores actual action history for a plant.
 - `plants.photo_path` stores the path or URI to the image.
 - `rooms` is a separate table.
-- Auth tables are delayed for now.
+- Auth tables are not part of v1.
 
 ### Technical conventions
 
-19. Any preferred package structure?
-20. Any coding style or validation conventions I should follow?
-21. Do you want OpenAPI/Swagger documentation?
-22. What test level do you want: unit, integration, controller, repository?
+- Tests should use `// Arrange`, `// Act`, `// Assert` comments.
+- Tests should use AssertJ for assertions.
+- Test coverage should include unit, integration, and repository tests.
+- Package structure uses hexagonal architecture:
+  - domain in `com.dreptschar.roots_backend.domain`
+  - inbound REST adapters in `com.dreptschar.roots_backend.adapter.inbound.rest`
+  - generated API contracts in `com.dreptschar.roots_backend.api`
+  - generated models in `com.dreptschar.roots_backend.model`
+- Generated sources live in `src-gen/openapi`.
 
 ### Non-functional requirements
 
-23. Any performance, security, or privacy constraints?
-24. Do you need logging, auditing, or error-format standards?
+- No additional non-functional constraints have been finalized yet.
 
 ## Stack decisions made so far
 
@@ -114,12 +122,15 @@ The project is intended for self-hosting and open-source use.
 - Authentication foundation: Spring Security
 - Existing API style: REST
 - API contract source: `src/main/resources/openapi.yaml`
-- REST adapter package: `com.dreptschar.plantmanagerbackend.adapter.outbound.rest`
-- API contract package: `com.dreptschar.plantmanagerbackend.adapter.outbound.rest.api`
-- Domain package: `com.dreptschar.plantmanagerbackend.domain`
-- Generated controller behavior: return `501 Not Implemented` until business logic is implemented
+- REST adapter package: `com.dreptschar.roots_backend.adapter.inbound.rest`
+- Generated API contract package: `com.dreptschar.roots_backend.api`
+- Generated model package: `com.dreptschar.roots_backend.model`
+- Generated sources location: `src-gen/openapi`
+- Domain package: `com.dreptschar.roots_backend.domain`
+- Generated API interfaces are used by handwritten controller implementations
 - First implemented endpoint: `GET /plants`
-- Plants list response is currently a simple summary DTO
+- Plants list response is a generated OpenAPI model mapped from `Plant`
+- Mapper framework: MapStruct
 
 ## Local development setup
 
@@ -131,6 +142,8 @@ The project is intended for self-hosting and open-source use.
 - Local datasource URL: `jdbc:postgresql://localhost:5432/plant_manager`
 - Default Spring profile for now: `local`
 
-## Fill-in section
+## Open questions
 
-Once you answer the questions above, I will turn this file into the project source of truth and keep it updated as the implementation evolves.
+- Should this eventually remain a pure REST API, or should it grow webhooks / SSE / GraphQL?
+- What should be the main endpoint set beyond plants, rooms, action types, action plans, and plant actions?
+- Do you want logging, auditing, or a standardized error format?
